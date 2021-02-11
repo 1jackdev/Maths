@@ -30,14 +30,14 @@ function getMode(array) {
 app.get("/mean", (req, res) => {
   let nums = req.query.nums;
   if (!nums) {
-    res.send(400, "Please provide some numbers.");
+    res.status(400).send("Please provide some numbers.");
   }
   let arr = nums.split(",");
   let sum = arr.reduce((acc, curr) => parseFloat(acc) + parseFloat(curr));
   if (!sum) {
-    res.send(400, "All values must be numbers");
+    res.status(400).send("All values must be numbers");
   } else {
-    res.send(200, {
+    res.status(200).send({
       operation: "mean",
       value: Number(sum / arr.length).toFixed(1),
     });
@@ -46,7 +46,7 @@ app.get("/mean", (req, res) => {
 app.get("/median", (req, res) => {
   let queryNums = req.query.nums;
   if (!queryNums) {
-    res.send(400, "Please provide some numbers.");
+    res.status(400).send("Please provide some numbers.");
   }
   let numberArr = new Array();
   let median;
@@ -64,7 +64,10 @@ app.get("/median", (req, res) => {
   } else {
     median = (numberArr[mid] + numberArr[mid - 1]) / 2;
   }
-  res.send(200, median);
+  res.status(200).send({
+    operation: "median",
+    value: median,
+  });
 });
 
 app.get("/mode", (req, res) => {
@@ -77,10 +80,13 @@ app.get("/mode", (req, res) => {
   }
   let biggestNum = getMode(numberArr);
   if (numberArr.length < 2) {
-    res.send(400, "Please provide at least 2 numbers");
+    res.status(400).send("Please provide at least 2 numbers");
   }
 
-  res.send(200, biggestNum);
+  res.status(200).send({
+    operation: "mode",
+    value: biggestNum,
+  });
 });
 
 app.listen(5000);
